@@ -1,4 +1,12 @@
 <?php
+class CURLOPT {
+	const URL = 10002;
+	const SSL_VERIFYHOST = 81;
+	const SSL_VERIFYPEER = 64;
+	const WRITEDATA = 10001;
+	const WRITEFUNCTION = 20011;
+}
+
 FFI::load("curl.h");
 FFI::load("write.h");
 
