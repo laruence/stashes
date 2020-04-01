@@ -61,8 +61,8 @@ class WhiteList {
 
             $buf = substr($data, self::HEADER_SIZE);
             if (!$this->validPackager($buf)) {
-				$output = $this->response(1, "unsupported packager");
-				goto response;
+                $output = $this->response(1, "unsupported packager");
+                goto response;
             }
             
             $buf = substr($data, self::HEADER_SIZE + 8); /* 跳过打包信息的8个字节 */
