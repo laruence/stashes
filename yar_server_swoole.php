@@ -54,10 +54,10 @@ class WhiteList {
         
         $server->on("Receive", function ($_server, $fd, $tid, $data) {
             $buf = substr($data, 0, self::HEADER_SIZE);
-			if (!$this->validHeader($header = $this->parseHeader($buf))) {
-				$output = $this->response(1, "illegal Yar RPC request");
-				goto response;
-			}
+            if (!$this->validHeader($header = $this->parseHeader($buf))) {
+                $output = $this->response(1, "illegal Yar RPC request");
+                goto response;
+            }
 
             $buf = substr($data, self::HEADER_SIZE);
             if (!$this->validPackager($buf)) {
@@ -65,14 +65,14 @@ class WhiteList {
 				goto response;
             }
             
-			$buf = substr($data, self::HEADER_SIZE + 8); /* 跳过打包信息的8个字节 */
-			$request = $this->parseRequest($buf);
-			if ($request == false) {
-				$output = $this->response(1, "malformed request body");
-				goto response;
-			}
+            $buf = substr($data, self::HEADER_SIZE + 8); /* 跳过打包信息的8个字节 */
+            $request = $this->parseRequest($buf);
+            if ($request == false) {
+                $output = $this->response(1, "malformed request body");
+                goto response;
+            }
 
-			$status = $this->handle($request, $ret);
+            $status = $this->handle($request, $ret);
             $output = $this->response($status, $ret);
         
             response:
