@@ -1,5 +1,6 @@
 #!/bin/env php
 <?php
+/* copy text to the host terminal clipboard */
 namespace Github\Laruence;
 
 class OSC52 {
@@ -17,6 +18,7 @@ class OSC52 {
 		$data = trim($data);
 		switch ($this->term) {
 		case "screen":
+			/* https://www.gnu.org/software/screen/manual/html_node/Control-Sequences.html */
 			echo "\033P\033]52;c;";
 			echo base64_encode($data);
 			echo "\007\033\\";
@@ -27,6 +29,8 @@ class OSC52 {
 			echo "\007\033\\";
 			break;
 		default:
+			/* See https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+			 * section "OSC Ps = 5 2" */
 			echo "\033]52;c;";
 			echo base64_encode($data);
 			echo "\007";
