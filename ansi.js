@@ -24,3 +24,4 @@ t.prefs_.set('color-palette-overrides',
 t.prefs_.set('foreground-color', '#BBBBBB');
 t.prefs_.set('background-color', '#1A1A1A');
 t.prefs_.set('cursor-color', 'rgba(0,255,0,0.7)');
+t.prefs_.set('cursor-blink', true);
