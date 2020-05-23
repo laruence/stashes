@@ -1,7 +1,7 @@
 black       = '#000000';
 red         = '#BB0000';
 green       = '#00BB00';
-yellow      = '#BB00BB';
+yellow      = '#BBBB00';
 blue        = '#0000BB';
 magenta     = '#BB00BB';
 cyan        = '#00BBBB';
@@ -22,5 +22,5 @@ t.prefs_.set('color-palette-overrides',
 		lightBlue, lightMagenta, lightCyan, lightWhite]);
 
 t.prefs_.set('foreground-color', '#BBBBBB');
-t.prefs_.set('background-color', '#1B1B1B');
-t.prefs_.set('cursor-color', 'rgba(0,187,0,0.6)');
+t.prefs_.set('background-color', '#1A1A1A');
+t.prefs_.set('cursor-color', 'rgba(0,255,0,0.7)');
