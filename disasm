@@ -1,6 +1,8 @@
 #!/bin/env php
 <?php
+/* Display opcodes of assmbler codes */
 /* Copyright (C) 2020 laruence */
+namespace Github\Laruence;
 
 $m32 = false;
 $reverse = false;
