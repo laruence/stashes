@@ -1,0 +1,95 @@
+#!/bin/env php
+<?php
+/* Copyright (C) 2020 laruence */
+
+$m32 = false;
+$reverse = false;
+
+$params = getopt("hrm:");
+if (isset($params["h"])) {
+	die (<<<HELP
+disasm  <options>  <stdin>
+display opcodes of assembler codes in x86-64 instruction set
+
+options:
+-m32   use x86 instruction set
+-r     display assembler codes of opcodes
+-h     help
+
+HELP
+);
+}
+if (isset($params["m"]) && $params["m"] == 32) {
+	$m32 = true;
+}
+
+if (isset($params["r"])) {
+	$reverse = true;
+}
+
+$input = file_get_contents("php://stdin");
+$input = rtrim($input); /* remove tailing \r */
+
+if ($reverse) {
+	m2asm($input);
+} else {
+	asm2m($input);
+}
+
+function create_tmpfile($input) {
+	$tmpname = tempnam(sys_get_temp_dir(), "disasm");
+	$template = <<<ASM
+$input\n
+ASM;
+	file_put_contents($tmpname, $template);
+	register_shutdown_function(function() use ($tmpname) {
+		@unlink($tmpname);
+	});
+	return $tmpname;
+}
+
+function asm2m($input) {
+	global $m32;
+
+	$input = str_replace(";", "\n", $input);
+	$file = create_tmpfile($input);
+
+	if ($m32) {
+		exec("gcc -m32 -x assembler -c -o $file.o $file", $output, $ret);
+	} else {
+		exec("gcc -x assembler -c -o $file.o $file", $output, $ret);
+	}
+
+	if ($ret == 0) {
+		exec("objdump -d $file.o", $output);
+
+		if (count($output)) {
+			$start = 7;
+			$end = count($output);
+			echo $m32? "x86" : "x86_64", " machine codes:\n";
+			for ($i = $start; $i < $end; $i++) {
+				echo $output[$i], "\n";
+			}
+		}
+	}
+	@unlink("$file.o");
+}
+
+function m2asm($input) {
+	global $m32;
+	$file = create_tmpfile($input);
+
+	if ($m32) {
+		exec("objdump -Matt,i386 -b binary -mi386 -D $file", $output);
+	} else {
+		exec("objdump -Matt,x86-64 -b binary -mi386:x86-64 -D $file", $output);
+	}
+	if (count($output)) {
+		$start = 7;
+		$end = count($output) - 1;
+		echo $m32? "x86" : "x86_64", " assembler:\n";
+		for ($i = $start; $i < $end; $i++) {
+			echo $output[$i], "\n";
+		}
+	}
+}

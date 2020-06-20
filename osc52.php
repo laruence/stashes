@@ -1,6 +1,7 @@
 #!/bin/env php
 <?php
 /* copy text to the host terminal clipboard */
+/* Copyright (C) 2020 laruence */
 namespace Github\Laruence;
 
 class OSC52 {
