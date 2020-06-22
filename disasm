@@ -9,22 +9,11 @@ $reverse = false;
 
 $params = getopt("hrm:");
 if (isset($params["h"])) {
-	die (<<<HELP
-disasm  <options>  <stdin>
-display opcodes of assembler codes in x86-64 instruction set
-
-options:
--m32   use x86 instruction set
--r     display assembler codes of opcodes
--h     help
-
-HELP
-);
+	help();
 }
 if (isset($params["m"]) && $params["m"] == 32) {
 	$m32 = true;
 }
-
 if (isset($params["r"])) {
 	$reverse = true;
 }
@@ -52,7 +41,7 @@ ASM;
 function asm2m($input) {
 	global $m32;
 
-	$input = rtrim($input); /* remove tailing \r */
+	$input = rtrim($input, "\n"); /* remove tailing \r */
 	$input = str_replace(";", "\n", $input);
 	$file = create_tmpfile($input);
 
@@ -80,6 +69,7 @@ function asm2m($input) {
 function m2asm($input) {
 	global $m32;
 
+	$input = rtrim($input, "\n"); /* remove tailing \r */
 	$file = create_tmpfile($input);
 
 	if ($m32) {
@@ -95,4 +85,18 @@ function m2asm($input) {
 			echo $output[$i], "\n";
 		}
 	}
+}
+
+function help() {
+	die (<<<HELP
+Usage: disasm [options] <stdin>
+Display opcodes of assembler codes in x86-64 instruction set
+
+options:
+    -m32   use x86 instruction set
+    -r     display assembler codes of opcodes
+    -h     help
+
+HELP
+);
 }
